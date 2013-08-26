@@ -1,0 +1,60 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 1 (0x1)
+        Signature Algorithm: md5WithRSAEncryption
+        Issuer: C=US, ST=Virginia, O=rguioscert.labs.microstrategy.com
+        Validity
+            Not Before: Aug 26 12:12:37 2013 GMT
+            Not After : Sep 25 12:12:37 2013 GMT
+        Subject: C=US, ST=Virginia, O=MicroStrategy, CN=10.197.41.74/emailAddress=rgu@microstrategy.com
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+            RSA Public Key: (1024 bit)
+                Modulus (1024 bit):
+                    00:a7:09:ec:52:35:3f:88:bb:dd:06:b9:da:6c:67:
+                    f8:8f:cb:d6:99:77:1a:bf:a6:22:74:5c:8b:b3:74:
+                    87:5c:b1:57:c2:c5:3a:74:a5:cc:29:2b:8c:c4:16:
+                    39:03:e2:e4:a7:4c:5b:ac:9a:c7:00:f6:94:76:92:
+                    0f:f5:b0:1d:7f:09:a3:4e:7e:08:50:45:06:74:42:
+                    32:d8:71:bf:02:2e:ac:dd:cb:24:85:82:6a:7c:66:
+                    4c:a7:24:b1:00:54:2a:6b:63:6a:96:73:ad:05:b7:
+                    6b:10:b9:b5:55:0f:1e:ae:f2:a3:cb:53:01:83:e1:
+                    0d:1c:bc:1a:b0:87:e1:56:25
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Basic Constraints: 
+                CA:FALSE
+            Netscape Comment: 
+                OpenSSL Generated Certificate
+            X509v3 Subject Key Identifier: 
+                45:39:BA:82:20:22:22:A5:00:12:62:01:47:16:F3:7E:F2:37:85:B6
+            X509v3 Authority Key Identifier: 
+                keyid:30:F0:13:8F:4D:6E:13:58:21:F1:18:8D:8A:12:C1:86:A6:95:AF:E5
+
+    Signature Algorithm: md5WithRSAEncryption
+        33:2b:7e:ad:3d:fc:a9:dd:a6:a1:ae:49:d8:3d:d8:15:fb:d6:
+        77:45:55:76:47:cc:71:35:81:15:d1:d2:cb:79:62:99:df:86:
+        c7:df:2b:b2:99:a6:11:d5:94:43:e5:44:d0:3b:5c:aa:75:a0:
+        f5:04:16:ac:a9:6f:ef:c2:62:7a:47:a2:b1:d1:c9:d5:50:e9:
+        6c:b1:f4:9b:51:1f:01:3c:85:10:0f:da:57:78:18:1b:7b:83:
+        4c:41:ad:db:a7:48:3a:1e:fe:c4:ec:f5:be:c7:87:cd:f8:a2:
+        e8:56:02:db:a8:46:b0:c0:a4:aa:26:05:10:34:b8:2c:0a:6a:
+        24:dc
+-----BEGIN CERTIFICATE-----
+MIICsjCCAhugAwIBAgIBATANBgkqhkiG9w0BAQQFADBMMQswCQYDVQQGEwJVUzER
+MA8GA1UECBMIVmlyZ2luaWExKjAoBgNVBAoTIXJndWlvc2NlcnQubGFicy5taWNy
+b3N0cmF0ZWd5LmNvbTAeFw0xMzA4MjYxMjEyMzdaFw0xMzA5MjUxMjEyMzdaMHUx
+CzAJBgNVBAYTAlVTMREwDwYDVQQIEwhWaXJnaW5pYTEWMBQGA1UEChMNTWljcm9T
+dHJhdGVneTEVMBMGA1UEAxMMMTAuMTk3LjQxLjc0MSQwIgYJKoZIhvcNAQkBFhVy
+Z3VAbWljcm9zdHJhdGVneS5jb20wgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGB
+AKcJ7FI1P4i73Qa52mxn+I/L1pl3Gr+mInRci7N0h1yxV8LFOnSlzCkrjMQWOQPi
+5KdMW6yaxwD2lHaSD/WwHX8Jo05+CFBFBnRCMthxvwIurN3LJIWCanxmTKcksQBU
+KmtjapZzrQW3axC5tVUPHq7yo8tTAYPhDRy8GrCH4VYlAgMBAAGjezB5MAkGA1Ud
+EwQCMAAwLAYJYIZIAYb4QgENBB8WHU9wZW5TU0wgR2VuZXJhdGVkIENlcnRpZmlj
+YXRlMB0GA1UdDgQWBBRFObqCICIipQASYgFHFvN+8jeFtjAfBgNVHSMEGDAWgBQw
+8BOPTW4TWCHxGI2KEsGGppWv5TANBgkqhkiG9w0BAQQFAAOBgQAzK36tPfyp3aah
+rknYPdgV+9Z3RVV2R8xxNYEV0dLLeWKZ34bH3yuymaYR1ZRD5UTQO1yqdaD1BBas
+qW/vwmJ6R6Kx0cnVUOlssfSbUR8BPIUQD9pXeBgbe4NMQa3bp0g6Hv7E7PW+x4fN
++KLoVgLbqEawwKSqJgUQNLgsCmok3A==
+-----END CERTIFICATE-----
