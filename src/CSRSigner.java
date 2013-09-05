@@ -6,10 +6,15 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.math.BigInteger;
 import java.security.KeyStore;
+import java.security.KeyStoreException;
 import java.security.PrivateKey;
 import java.security.SecureRandom;
+import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
+import java.util.List;
 
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.DEROutputStream;
@@ -23,6 +28,7 @@ import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.X509ExtensionUtils;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
+import org.bouncycastle.cert.jcajce.JcaX509CertificateHolder;
 import org.bouncycastle.cms.CMSProcessableByteArray;
 import org.bouncycastle.cms.CMSSignedData;
 import org.bouncycastle.cms.CMSSignedDataGenerator;
@@ -43,23 +49,52 @@ import org.bouncycastle.pkcs.PKCS10CertificationRequest;
 import org.bouncycastle.util.encoders.Base64;
 
 public class CSRSigner {
-	
+	//signer.keystore test123 client-req.csr
 	public static void main(String[] args) throws Throwable {
 		if (args != null && args.length == 3) {
+//			args[2]="client.csr";
+			args[2]="client-req.csr";
 			KeyStore ks = KeyStore.getInstance("JKS");
 			FileReader reader = new FileReader(args[2]);
 			
 			ks.load(new FileInputStream(args[0]), args[1].toCharArray());
-			System.out.println(signCSR(reader, ks, "skey", args[1].toCharArray(), "p7b"));
+			//System.out.println(signCSR(reader, ks, "skey", args[1].toCharArray(), "p7b"));
 
 		    /*=========================================================================*/
-		    String filename = "clientFromCA2.p7b";
+//		    String filename = "clientFromCA.cer";
+//		    final FileOutputStream os = new FileOutputStream(filename); 
+//			 reader = new FileReader(args[2]);
+//		    os.write(signCSR(reader, ks, "skey", args[1].toCharArray(), "cer").getBytes());
+//		    os.close();
+//			signCSR(reader, ks, "skey", args[1].toCharArray(), "cer");
+		    /*=========================================================================*/
+			
+		    /*=========================================================================*/
+//		    String filename = "clientFromCA.p7b";
+//		    final FileOutputStream os = new FileOutputStream(filename); 
+//		    os.write(signCSR(reader, ks, "skey", args[1].toCharArray(), "p7b").getBytes());
+//		    os.close();
+		    /*=========================================================================*/		    
+
+		    /*=========================================================================*/
+		    String filename = "clientFromCA.pem";
 		    final FileOutputStream os = new FileOutputStream(filename); 
-			 reader = new FileReader(args[2]);
-		    os.write(signCSR(reader, ks, "skey", args[1].toCharArray(), "p7b").getBytes());
+		    os.write(signCSR(reader, ks, "skey", args[1].toCharArray(), "pem").getBytes());
 		    os.close();
 		    /*=========================================================================*/
 		}
+	}
+	
+	public static List<Certificate> getCertificates(KeyStore ks) throws KeyStoreException {
+		List<Certificate> certs = new ArrayList<Certificate>();
+		if (ks != null) {
+			Enumeration<String> aliases = ks.aliases();
+			while (aliases.hasMoreElements()) {
+				Certificate cert = ks.getCertificate(aliases.nextElement());
+				certs.add(cert);
+			}
+		}
+		return certs;
 	}
 	
 	public static String signCSR(Reader pemcsr, KeyStore keystore, String alias, char[] password, String returnPackage) throws Exception {
@@ -79,7 +114,8 @@ public class CSRSigner {
 
 	    AlgorithmIdentifier sigAlgId = new DefaultSignatureAlgorithmIdentifierFinder().find("SHA1withRSA");
 	    AlgorithmIdentifier digAlgId = new DefaultDigestAlgorithmIdentifierFinder().find(sigAlgId);
-	    X500Name issuer = new X500Name(cacert.getSubjectX500Principal().getName());
+//	    X500Name issuer = new X500Name(cacert.getSubjectX500Principal().getName());
+	    X500Name issuer = new JcaX509CertificateHolder(cacert).getSubject();
 	    BigInteger serial = new BigInteger(32, new SecureRandom());
 	    Date from = new Date();
 	    Date to = new Date(System.currentTimeMillis() + (365 * 86400000L));
@@ -102,7 +138,19 @@ public class CSRSigner {
 		    out.write("-----BEGIN CERTIFICATE-----\n".getBytes("ISO-8859-1"));
 		    out.write(Base64.encode(certencoded));
 		    out.write("\n-----END CERTIFICATE-----\n".getBytes("ISO-8859-1"));
-	    } else {
+		    
+		    DEROutputStream dos = new DEROutputStream(new FileOutputStream("clientFromCA.der"));
+		    dos.writeObject(holder.toASN1Structure());
+		    dos.close();
+
+		    // PEMWriter pemWrt = new PEMWriter(new OutputStreamWriter(System.out));
+	    }else if("pem".equalsIgnoreCase(returnPackage)){
+		    PEMWriter pemWrt = new PEMWriter(new OutputStreamWriter(out));
+		    pemWrt.writeObject(holder);
+		    pemWrt.writeObject(cacert);
+		    pemWrt.close();
+	    }
+	    else {
 		    CMSSignedDataGenerator generator = new CMSSignedDataGenerator();
 		    signer = new JcaContentSignerBuilder("SHA1withRSA").build(cakey);
 		    generator.addSignerInfoGenerator(new JcaSignerInfoGeneratorBuilder(new JcaDigestCalculatorProviderBuilder().build()).build(signer, cacert));
@@ -111,13 +159,17 @@ public class CSRSigner {
 		    CMSTypedData content = new CMSProcessableByteArray(certencoded);
 		    CMSSignedData signeddata = generator.generate(content, true);
 
-		    out.write("-----BEGIN PKCS #7 SIGNED DATA-----\n".getBytes("ISO-8859-1"));
+//		    out.write("-----BEGIN PKCS #7 SIGNED DATA-----\n".getBytes("ISO-8859-1"));
+//		    out.write(Base64.encode(signeddata.getEncoded()));
+//		    out.write("\n-----END PKCS #7 SIGNED DATA-----\n".getBytes("ISO-8859-1"));
+		    out.write("-----BEGIN PKCS7-----\n".getBytes("ISO-8859-1"));
 		    out.write(Base64.encode(signeddata.getEncoded()));
-		    out.write("\n-----END PKCS #7 SIGNED DATA-----\n".getBytes("ISO-8859-1"));
-		    
-		    DEROutputStream dos = new DEROutputStream(new FileOutputStream("clientFromCA.p7b"));
+		    out.write("\n-----END PKCS7-----\n".getBytes("ISO-8859-1"));
+
+		    DEROutputStream dos = new DEROutputStream(new FileOutputStream("clientFromCA.der.p7b"));
 		    dos.writeObject(signeddata.toASN1Structure());
 		    dos.close();
+		    
 	    }
 	    out.close();
 	    return new String(out.toByteArray(), "ISO-8859-1");
